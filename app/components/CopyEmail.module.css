@@ -1,0 +1,46 @@
+.button {
+  display: grid;
+  place-items: center;
+  width: var(--cell);
+  min-height: var(--cell);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: var(--fs-lg);
+  color: var(--color-text-faint);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.button[data-copied] {
+  color: var(--color-brand);
+}
+
+.button[data-failed] {
+  color: var(--color-text-muted);
+}
+
+.button:active {
+  transform: translateY(var(--shift-press));
+}
+
+@media (hover: hover) {
+  .button:hover {
+    color: var(--color-text);
+  }
+
+  .button[data-copied]:hover {
+    color: var(--color-brand);
+  }
+
+  .button[data-failed]:hover {
+    color: var(--color-text-muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button:active {
+    transform: none;
+  }
+}

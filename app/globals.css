@@ -1,0 +1,3 @@
+/* Ordem: tokens → base. Estilos de componente ficam em *.module.css */
+@import "./styles/tokens.css";
+@import "./styles/base.css";

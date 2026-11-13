@@ -1,0 +1,364 @@
+/* ---------- coluna presa à grade ----------
+   Largura = número ímpar de células: com a grade centralizada (base.css),
+   as bordas da coluna caem exatamente sobre as linhas. */
+.page {
+  width: calc(
+    round(
+        down,
+        100vw - var(--page-gutter-min) * 2 - var(--grid-size),
+        var(--grid-size) * 2
+      ) + var(--grid-size)
+  );
+  max-width: calc(var(--grid-size) * var(--grid-cols-max));
+  margin-inline: auto;
+  padding: var(--space-6) 0 var(--space-10);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+@supports not (width: round(down, 100vw, 1rem)) {
+  .page {
+    width: 100%;
+    max-width: var(--page-max);
+    padding-inline: var(--page-gutter);
+  }
+}
+
+/* entrada escalonada (i = 0..5) — base.css zera com prefers-reduced-motion */
+.top,
+.hero,
+.item,
+.footer {
+  animation: rise var(--dur-enter) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger));
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--shift-enter));
+  }
+}
+
+/* ---------- topo ---------- */
+.top {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-mono);
+  color: var(--color-text-faint);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border);
+}
+
+/* ---------- marca ---------- */
+.hero {
+  display: grid;
+  gap: var(--space-4);
+  padding-top: var(--space-8);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  overflow-wrap: anywhere;
+}
+
+/* o ponto tiffany do logo entra por último */
+.square {
+  display: inline-block;
+  width: var(--brand-square);
+  height: var(--brand-square);
+  margin-left: var(--brand-square-gap);
+  border-radius: calc(var(--brand-square) * 0.18);
+  background: var(--color-brand);
+  transform-origin: 0 100%;
+  animation: square-in var(--dur-base) var(--ease-snap) both;
+  animation-delay: calc(var(--stagger) + var(--delay-brand-square));
+}
+
+@keyframes square-in {
+  from {
+    transform: scale(0);
+  }
+}
+
+.tagline {
+  max-width: var(--measure-tagline);
+  font-size: var(--fs-lg);
+  line-height: var(--lh-snug);
+  color: var(--color-text-muted);
+}
+
+/* ---------- índice ---------- */
+.list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+
+/* o bloco sólido (01) fica fora das linhas finas; o índice começa no 02 */
+.list > li:first-child {
+  margin-bottom: var(--space-6);
+}
+
+.list > li:nth-child(2) {
+  border-top: var(--border);
+}
+
+.groupLabel {
+  padding: var(--space-6) 0 var(--space-2) var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-mono);
+  color: var(--color-text-faint);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: var(--cell) 1fr var(--cell);
+  min-height: var(--row-h);
+  border-bottom: var(--border);
+  background: linear-gradient(var(--color-surface), var(--color-surface)) no-repeat 0 0 / 0% 100%;
+  transition:
+    background-size var(--dur-wipe) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.rowItem .row {
+  padding-block: var(--space-4);
+}
+
+.row:focus-visible {
+  background-size: 100% 100%;
+}
+
+.row:active {
+  transform: translateY(var(--shift-press));
+}
+
+.num {
+  align-self: start;
+  padding-left: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-mono);
+  line-height: var(--lh-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-faint);
+}
+
+.body {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-mono);
+  color: var(--color-text-faint);
+  white-space: nowrap;
+}
+
+.meta i {
+  font-size: var(--icon-inline);
+  color: var(--color-brand);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+/* ponto estático, mesma escala do quadrado do logo */
+.statusDot {
+  display: inline-block;
+  flex: none;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: var(--radius-full);
+  background: currentColor;
+}
+
+.title {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+}
+
+.desc {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--color-text-muted);
+}
+
+.arrow {
+  align-self: center;
+  justify-self: center;
+  font-size: var(--fs-xl);
+  color: var(--color-text-faint);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.row:focus-visible .arrow {
+  transform: translate(var(--shift-nudge), calc(var(--shift-nudge) * -1));
+  color: var(--color-text);
+}
+
+/* linha compacta (Extra): uma célula de altura, título + meta na mesma linha */
+.rowItem .compact {
+  min-height: var(--cell);
+  padding-block: var(--space-2);
+  align-items: center;
+}
+
+.compact .num {
+  align-self: center;
+}
+
+.compact .body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-3);
+  row-gap: 0;
+}
+
+/* a 320–360px o status quebra para a linha seguinte em vez de vazar */
+.compact .meta {
+  flex-wrap: wrap;
+  white-space: normal;
+  column-gap: var(--space-1);
+  row-gap: 0;
+}
+
+.compact .title {
+  font-size: var(--fs-md);
+}
+
+/* ---------- rodapé (colofão) ---------- */
+.footer {
+  margin-top: auto;
+  display: grid;
+  font-size: var(--fs-sm);
+}
+
+.footer .groupLabel {
+  padding-top: 0;
+}
+
+.contacts {
+  list-style: none;
+  padding: 0;
+  border-top: var(--border);
+}
+
+.contacts > li {
+  border-bottom: var(--border);
+}
+
+.contacts .row {
+  border-bottom: 0;
+}
+
+.line {
+  min-height: var(--cell);
+  align-items: center;
+}
+
+.lineIcon {
+  justify-self: center;
+  font-size: var(--fs-lg);
+  color: var(--color-brand);
+}
+
+.lineText {
+  min-width: 0;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.row:focus-visible .lineText {
+  color: var(--color-text);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* e-mail: o link ocupa as colunas 1–2, o botão de copiar a 3 */
+.lineSplit {
+  display: grid;
+  grid-template-columns: var(--cell) 1fr var(--cell);
+}
+
+.lineSplit .row {
+  grid-column: 1 / 3;
+  grid-template-columns: var(--cell) 1fr;
+}
+
+.sign {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-4) 0 0 var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-mono);
+  color: var(--color-text-faint);
+}
+
+.signSquare {
+  display: inline-block;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: calc(var(--dot-size) * 0.18);
+  background: var(--color-brand);
+}
+
+/* ---------- hover só em dispositivos com ponteiro ---------- */
+@media (hover: hover) {
+  .row:hover {
+    background-size: 100% 100%;
+  }
+
+  .row:hover .arrow {
+    transform: translate(var(--shift-nudge), calc(var(--shift-nudge) * -1));
+    color: var(--color-text);
+  }
+
+  .row:hover .lineText {
+    color: var(--color-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .square {
+    animation: none;
+  }
+
+  .row:active,
+  .row:hover .arrow,
+  .row:focus-visible .arrow {
+    transform: none;
+  }
+}

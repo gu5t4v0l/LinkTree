@@ -1,0 +1,424 @@
+/* ==========================================================
+   CTA de orçamento — único bloco tiffany sólido da página
+   ========================================================== */
+.cta {
+  display: grid;
+  grid-template:
+    "num arrow" auto
+    "title title" 1fr
+    "desc desc" auto
+    / 1fr var(--cell);
+  width: 100%;
+  min-height: calc(var(--grid-size) * 3);
+  padding: 0 0 var(--space-4) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-brand);
+  color: var(--color-brand-ink);
+  text-align: left;
+  transition:
+    background-color var(--dur-press) var(--ease-out),
+    transform var(--dur-press) var(--ease-out);
+}
+
+.cta:active {
+  background: var(--color-brand-press);
+  transform: translateY(var(--shift-press));
+}
+
+.ctaNum {
+  grid-area: num;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-brand-ink-soft);
+}
+
+.ctaArrow {
+  grid-area: arrow;
+  display: grid;
+  width: var(--cell);
+  height: var(--cell);
+  overflow: hidden;
+  border-radius: 0 var(--radius-sm) 0 var(--radius-sm);
+  background: var(--color-brand-ink);
+  color: var(--color-brand);
+  font-size: var(--fs-xl);
+}
+
+.ctaArrow i {
+  grid-area: 1 / 1;
+  place-self: center;
+  transition: transform var(--dur-swap) var(--ease-swap);
+}
+
+.ctaArrow i:last-child {
+  transform: translateY(100%);
+}
+
+.ctaTitle {
+  grid-area: title;
+  align-self: end;
+  padding-right: var(--space-4);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-heading);
+}
+
+.ctaDesc {
+  grid-area: desc;
+  padding: var(--space-1) var(--space-4) 0 0;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+  color: var(--color-brand-ink-soft);
+}
+
+/* troca da seta: a de cima sai, a de baixo entra */
+.cta:focus-visible .ctaArrow i:first-child {
+  transform: translateY(-100%);
+}
+
+.cta:focus-visible .ctaArrow i:last-child {
+  transform: none;
+}
+
+/* ==========================================================
+   Folha de orçamento: bottom sheet no celular, painel no desktop
+   ========================================================== */
+.sheet {
+  width: 100%;
+  max-width: var(--page-max);
+  max-height: var(--sheet-max-h);
+  margin: auto auto 0;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: var(--border-strong);
+  border-bottom: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-sheet);
+  z-index: var(--z-sheet);
+
+  /* fechado (e estado de saída) */
+  transform: translateY(100%);
+  transition-property: transform, overlay, display;
+  transition-duration: var(--dur-exit);
+  transition-timing-function: var(--ease-in);
+  transition-behavior: allow-discrete;
+}
+
+.sheet[open] {
+  transform: none;
+  transition-duration: var(--dur-enter);
+  transition-timing-function: var(--ease-out);
+}
+
+@starting-style {
+  .sheet[open] {
+    transform: translateY(100%);
+  }
+}
+
+.sheet::backdrop {
+  background: var(--color-overlay);
+  opacity: 0;
+  transition-property: opacity, overlay, display;
+  transition-duration: var(--dur-exit);
+  transition-timing-function: var(--ease-in);
+  transition-behavior: allow-discrete;
+}
+
+.sheet[open]::backdrop {
+  opacity: 1;
+  transition-duration: var(--dur-enter);
+  transition-timing-function: var(--ease-out);
+}
+
+@starting-style {
+  .sheet[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+/* media query não aceita var(); 40rem = mesmo valor de DESKTOP_QUERY no TSX */
+@media (min-width: 40rem) {
+  .sheet {
+    margin: auto;
+    border-bottom: var(--border-strong);
+    border-radius: var(--radius-lg);
+    opacity: 0;
+    transform: translateY(var(--space-4));
+    transition-property: transform, opacity, overlay, display;
+  }
+
+  .sheet[open] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @starting-style {
+    .sheet[open] {
+      opacity: 0;
+      transform: translateY(var(--space-4));
+    }
+  }
+}
+
+.form {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-2) var(--page-gutter)
+    max(var(--space-8), calc(env(safe-area-inset-bottom) + var(--space-4)));
+}
+
+/* área de arrasto (puxador + cabeçalho) */
+.drag {
+  display: grid;
+  gap: var(--space-4);
+  touch-action: none;
+}
+
+.handle {
+  justify-self: center;
+  width: var(--handle-w);
+  height: var(--space-1);
+  border-radius: var(--space-1);
+  background: var(--color-line-strong);
+}
+
+@media (min-width: 40rem) {
+  .drag {
+    touch-action: auto;
+  }
+
+  .handle {
+    display: none;
+  }
+
+  .form {
+    padding-top: var(--space-6);
+  }
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-mono);
+  color: var(--color-brand);
+  margin-bottom: var(--space-2);
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-heading);
+}
+
+.title:focus {
+  outline: none;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: var(--fs-xl);
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+/* ---------- campos ---------- */
+.field {
+  display: grid;
+  gap: var(--space-2);
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.field > span,
+.field > legend {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  padding: 0;
+  margin-bottom: var(--space-2);
+}
+
+.field > span {
+  margin-bottom: 0;
+}
+
+.field em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--color-text-faint);
+  margin-left: var(--space-1);
+}
+
+.field input:not([type="radio"]) {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-field);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-size: var(--fs-md);
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+/* foco: borda tiffany + o outline global de :focus-visible (base.css) */
+.field input:not([type="radio"]):focus {
+  border-color: var(--color-brand);
+}
+
+/* ---------- chips de rádio ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-field);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.chip input:checked + span {
+  background: var(--color-brand-tint);
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+  font-weight: var(--fw-medium);
+}
+
+.chip input:focus-visible + span {
+  outline: var(--focus-width) solid var(--color-brand);
+  outline-offset: var(--focus-offset);
+}
+
+/* ---------- enviar ---------- */
+.submit {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--tap-primary);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-brand);
+  color: var(--color-brand-ink);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  transition: transform var(--dur-press) var(--ease-out);
+}
+
+.submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-brand-press);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-wipe) var(--ease-out);
+}
+
+.submit:active {
+  transform: translateY(var(--shift-press));
+}
+
+.submit i {
+  font-size: var(--fs-xl);
+}
+
+.submitArrow {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* ---------- hover só com ponteiro ---------- */
+@media (hover: hover) {
+  .cta:hover .ctaArrow i:first-child {
+    transform: translateY(-100%);
+  }
+
+  .cta:hover .ctaArrow i:last-child {
+    transform: none;
+  }
+
+  .close:hover {
+    color: var(--color-text);
+  }
+
+  .chip:hover span {
+    color: var(--color-text);
+  }
+
+  .chip:hover input:checked + span {
+    color: var(--color-brand);
+  }
+
+  .submit:hover::before {
+    transform: scaleX(1);
+  }
+
+  .submit:hover .submitArrow {
+    transform: translateX(var(--shift-nudge));
+  }
+}
+
+/* ---------- movimento reduzido: sem transform de hover, seta estática ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ctaArrow i:last-child {
+    display: none;
+  }
+
+  .cta:hover .ctaArrow i:first-child,
+  .cta:focus-visible .ctaArrow i:first-child,
+  .cta:active,
+  .submit:active,
+  .submit:hover .submitArrow {
+    transform: none;
+  }
+}
