@@ -69,14 +69,12 @@ export const LINKS: LinkItem[] = [
     href: SITE_URL,
     meta: SITE_LABEL,
   },
-  // Reativar quando o grupo estiver aberto (grupo não aceita entrada):
-  // {
-  //   id: "shopee",
-  //   title: "Ofertas da Shopee",
-  //   icon: "ri-shopping-bag-3-line",
-  //   href: SHOPEE_GROUP_URL,
-  //   meta: "grupo no WhatsApp",
-  //   status: "em teste",
-  //   extra: true,
-  // },
+  {
+    id: "shopee",
+    title: "Ofertas da Shopee",
+    icon: "ri-shopping-bag-3-line",
+    href: SHOPEE_GROUP_URL,
+    meta: "grupo no WhatsApp",
+    extra: true,
+  },
 ];
